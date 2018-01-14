@@ -15,6 +15,8 @@ classifications, we use the following variables:
 | Browser | string |
 | AdExchange | int |
 | AdvertiserID | int |
+| Adslotwidth | int |
+| Adslotheight | int |
 | interest_* | boolean |
 | Inmarket_* | boolean |
 | Demographic_gender_male | boolean |
@@ -25,7 +27,7 @@ whether an advertiser is allowed the impression (ie, the advertiser has won with
 directly dependent upon `imp` (ie, `click` cannot be true if `imp` is false). Therefore, we will use only bids where
 `imp == True` as training and test data.
 
-In our dataset, `Browser` indicates the [user agent][2] of the user targeted with the bid. We use the Python package
+In our dataset, `Browser` indicates the [user agent][2] of the user targeted by the bid. We use the Python package
 [user-agents][3] to translate the user agent into a factor variable which will indicate the browser family of the user
 (ie, `Mozilla Firefox`, `Chrome`, `Safari`, ...). `AdvertiserID` contains the unique identification number for each
 advertiser. To reduce our memory overhead, we will use only bids where `AdvertiserID == 2259` (a milk provider).
@@ -38,13 +40,14 @@ material, `interest_education == True`. The same holds true for the `Inmarket_*`
 Notice that there are additional variables in the dataset, which we chose to ignore (at least for the initial analysis).
 Some of them are completely irrelevant to the `click` prediction, such as the domain name of the ad. Others could be
 interesting for the `click` prediction and may be used in future predictions. Examples include the ad format or the
-region of the user. Other variables are discouraged by the distributor of the dataset, because they are not consistent.
+region of the user. We decided against using ad format variables like `Adviewability` because they contain too much
+missing values. Other variables are discouraged by the distributor of the dataset, because they are not consistent.
 This holds true for the `conv` variable, which indicates whether a user actually converted to a customer after clicking
 on an ad.
 
 Classification
 ---
-To predict whether a user will click or not is a classical binary classification. [Data](#sec-data) details that we
+To predict whether a user will click or not is a classical binary classification task. [Data](#sec-data) details that we
 have a binary label and binary/categorical features. We figure that to regress `click ~ .`, [random forests][4] are a
 perfect fit. They are applicable to categorical features, as opposed to other Machine Learning algorithms that are only
 applicable to numerical features (eg SVM). Random forests are ensembles of [decision trees][7] and therefore reduce the
