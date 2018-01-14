@@ -1,4 +1,5 @@
 .*
 __*
+data/ads.csv
 !.gitignore
 !.gitattributes
