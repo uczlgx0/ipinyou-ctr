@@ -40,7 +40,7 @@ material, `interest_education == True`. The same holds true for the `Inmarket_*`
 Notice that there are additional variables in the dataset, which we chose to ignore (at least for the initial analysis).
 Some of them are completely irrelevant to the `click` prediction, such as the domain name of the ad. Others could be
 interesting for the `click` prediction and may be used in future predictions. Examples include the ad format or the
-region of the user. We decided against using ad format variables like `Adviewability` because they contain too much
+region of the user. We decided against using ad format variables like `Adviewability` because they contain too many
 missing values. Other variables are discouraged by the distributor of the dataset, because they are not consistent.
 This holds true for the `conv` variable, which indicates whether a user actually converted to a customer after clicking
 on an ad.

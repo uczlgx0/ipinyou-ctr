@@ -26,6 +26,7 @@ if not isdir(dump_dir):
 
 x = pd.read_csv(args.input)
 x = x.as_matrix()
+x = x.astype(int)
 
 x_tr, x_te, y_tr, y_te = split_data(x, train_pct)
 
