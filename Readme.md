@@ -28,7 +28,7 @@ directly dependent upon `imp` (ie, `click` cannot be true if `imp` is false). Th
 `imp == True` as training and test data.
 
 In our dataset, `Browser` indicates the [user agent][2] of the user targeted by the bid. We use the Python package
-[user-agents][3] to translate the user agent into a factor variable which will indicate the browser family of the user
+[ua-parser][3] to translate the user agent into a factor variable which will indicate the browser family of the user
 (ie, `Mozilla Firefox`, `Chrome`, `Safari`, ...). `AdvertiserID` contains the unique identification number for each
 advertiser. To reduce our memory overhead, we will use only bids where `AdvertiserID == 2259` (a milk provider).
 
@@ -71,7 +71,7 @@ variables are not conclusive enough to classify `imp` correctly.
 
 [1]: https://arxiv.org/abs/1407.7073
 [2]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
-[3]: https://pypi.python.org/pypi/user-agents
+[3]: https://github.com/ua-parser/uap-python
 [4]: https://ect.bell-labs.com/who/tkh/publications/papers/odt.pdf
 [5]: https://en.wikipedia.org/wiki/Logistic_regression
 [6]: https://scikit-learn.org

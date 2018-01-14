@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pandas as pd
+from ua_parser.user_agent_parser import ParseUserAgent
 
 ads = pd.read_csv('data/ads.csv', usecols=['click', 'Browser', 'AdvertiserID', 'AdExchange', 'Adslotwidth',
                                            'Adslotheight', 'imp', 'interest_news',
@@ -20,6 +21,9 @@ ads = pd.read_csv('data/ads.csv', usecols=['click', 'Browser', 'AdvertiserID', '
                                            'Inmarket_service', 'Inmarket_electronicgame', 'Inmarket_book',
                                            'Inmarket_medicine', 'Inmarket_food_drink', 'Inmarket_homeimprovement',
                                            'Demographic_gender_male', 'Demographic_gender_famale'])
+cols = ['click'] + [col for col in ads if col != 'click']
+ads = ads[cols]
+ads.drop(['Unnamed: 0'], axis=1, inplace=True)
 ads.rename(
     columns={'interest_eduation': 'interest_education', 'Demographic_gender_famale': 'Demographic_gender_female'},
     inplace=True)
@@ -44,6 +48,7 @@ ads[boolean_cols] = ads[boolean_cols].astype(bool)
 int_cols = ['AdExchange', 'AdvertiserID', 'Adslotwidth', 'Adslotheight']
 ads[int_cols] = ads[int_cols].astype(int)
 ads.to_csv('data/ads_clean.csv')
+ads['Browser'] = ads['Browser'].astype('category')
 ads.head(10)
 ads.info()
 ads.describe()
