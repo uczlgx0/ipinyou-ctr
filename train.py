@@ -30,11 +30,11 @@ x = x.astype(int)
 
 x_tr, x_te, y_tr, y_te = split_data(x, train_pct)
 
-class_weights = {0: 1, 1: 2}
+class_weights = {0: 1, 1: 1000}
 rf = RandomForestClassifier(n_estimators=trees, n_jobs=-1, verbose=1, class_weight=class_weights)
 rf.fit(x_tr, y_tr)
 
-accuracy = accuracy_score(rf.predict(x_te), y_te)
+accuracy = accuracy_score(y_te, rf.predict(x_te))
 print(f'Accuracy: {accuracy}')
 id = str(int(time()))
 if isfile(rf_models_path):

@@ -29,7 +29,7 @@ ads.drop(['Unnamed: 0'], axis=1, inplace=True)
 ads.rename(
     columns={'interest_eduation': 'interest_education', 'Demographic_gender_famale': 'Demographic_gender_female'},
     inplace=True)
-ads.dropna(inplace=True)
+ads.dropna(inplace=True)  # ToDo: Decrease strictness to preserve more positive classes
 boolean_cols = ['imp', 'click', 'interest_news',
                 'interest_education', 'interest_automobile', 'interest_realestate',
                 'interest_IT', 'interest_electronicgame', 'interest_fashion',
