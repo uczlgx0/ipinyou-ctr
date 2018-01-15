@@ -21,15 +21,14 @@ ads = pd.read_csv('data/ads.csv', usecols=['click', 'AdvertiserID', 'AdExchange'
                                            'Inmarket_finance', 'Inmarket_travel', 'Inmarket_education',
                                            'Inmarket_service', 'Inmarket_electronicgame', 'Inmarket_book',
                                            'Inmarket_medicine', 'Inmarket_food_drink', 'Inmarket_homeimprovement',
-                                           'Demographic_gender_male', 'Demographic_gender_famale']
-                                          + ['Browser'] if use_browser else [])
+                                           'Demographic_gender_male', 'Demographic_gender_famale'] + (['Browser'] if use_browser else []))
 cols = ['click'] + [col for col in ads if col != 'click']
 ads = ads[cols]
-ads.drop(['Unnamed: 0'], axis=1, inplace=True)
+#ads.drop(['Unnamed: 0'], axis=1, inplace=True)
 ads.rename(
     columns={'interest_eduation': 'interest_education', 'Demographic_gender_famale': 'Demographic_gender_female'},
     inplace=True)
-ads.dropna(inplace=True)
+ads.dropna(inplace=True)  # ToDo: Decrease strictness to preserve more positive classes
 boolean_cols = ['imp', 'click', 'interest_news',
                 'interest_education', 'interest_automobile', 'interest_realestate',
                 'interest_IT', 'interest_electronicgame', 'interest_fashion',

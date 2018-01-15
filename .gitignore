@@ -1,4 +1,4 @@
 .*
 __*
-data/ads.csv
+data/*
 !.gitignore
