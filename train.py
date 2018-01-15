@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals.joblib import dump
@@ -5,7 +6,7 @@ from sklearn.metrics import classification_report, f1_score, recall_score, preci
 from sklearn.model_selection import GridSearchCV
 from time import time
 from os.path import isdir, isfile, join
-import pandas as pd
+from pandas import read_csv
 from csv import writer
 from os import mkdir
 from util import split_data
@@ -17,7 +18,7 @@ parser = ArgumentParser(description='Fits a Random forest model onto the trainin
                         formatter_class=ArgumentDefaultsHelpFormatter)
 parser.add_argument('-t', '--trees', type=int, default=1000, help='The number of decision trees to use.')
 parser.add_argument('-o', '--output', type=str, default='dump', help='Output directory to use.')
-parser.add_argument('-i', '--input', type=int, default='data/ads_clean.csv', help='Path to the input dataset.')
+parser.add_argument('-i', '--input', type=str, default='data/ads_clean.csv', help='Path to the input dataset.')
 parser.add_argument('-cv', type=bool, default=False, help='Pass if hyperparameters should be tuned via cross validation')
 args = parser.parse_args()
 trees = args.trees
@@ -26,7 +27,7 @@ dump_dir = args.output
 if not isdir(dump_dir):
     mkdir(dump_dir)
 
-x = pd.read_csv(args.input)
+x = read_csv(args.input)
 x = x.as_matrix()
 x = x.astype(int)
 
@@ -67,4 +68,4 @@ if not isdir(join(dump_dir, 'rf')):
 if args.cv:
     dump(clf.best_estimator_, join(dump_dir, 'rf', id))
 else:
-    dump(rf.best_estimator_, join(dump_dir, 'rf', id))
+    dump(rf, join(dump_dir, 'rf', id))
