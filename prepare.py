@@ -24,11 +24,9 @@ ads = pd.read_csv('data/ads.csv', usecols=['click', 'AdvertiserID', 'AdExchange'
                                            'Demographic_gender_male', 'Demographic_gender_famale'] + (['Browser'] if use_browser else []))
 cols = ['click'] + [col for col in ads if col != 'click']
 ads = ads[cols]
-#ads.drop(['Unnamed: 0'], axis=1, inplace=True)
 ads.rename(
     columns={'interest_eduation': 'interest_education', 'Demographic_gender_famale': 'Demographic_gender_female'},
     inplace=True)
-ads.dropna(inplace=True)  # ToDo: Decrease strictness to preserve more positive classes
 boolean_cols = ['imp', 'click', 'interest_news',
                 'interest_education', 'interest_automobile', 'interest_realestate',
                 'interest_IT', 'interest_electronicgame', 'interest_fashion',
@@ -46,13 +44,15 @@ boolean_cols = ['imp', 'click', 'interest_news',
                 'Inmarket_medicine', 'Inmarket_food_drink', 'Inmarket_homeimprovement',
                 'Demographic_gender_male', 'Demographic_gender_female']
 ads[boolean_cols] = ads[boolean_cols].astype(bool)
+ads = ads[ads['imp']]
+ads.drop(['imp'], axis=1, inplace=True)
+ads.dropna(inplace=True)  # ToDo: Decrease strictness to preserve more positive classes
 int_cols = ['AdExchange', 'AdvertiserID', 'Adslotwidth', 'Adslotheight']
 ads[int_cols] = ads[int_cols].astype(int)
 if use_browser:
     ads['Browser'] = ads['Browser'].map(lambda x: ParseUserAgent(x)['family'])
     ads['Browser'] = ads['Browser'].astype('category')
-ads.to_csv('data/ads_clean.csv')
+ads.to_csv('data/ads_clean.csv', index=False)
 ads.head(10)
 ads.info()
 ads.describe()
-print(len(ads[ads['imp'] == 0]))

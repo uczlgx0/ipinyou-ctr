@@ -19,7 +19,7 @@ parser = ArgumentParser(description='Fits a Random forest model onto the trainin
 parser.add_argument('-t', '--trees', type=int, default=1000, help='The number of decision trees to use.')
 parser.add_argument('-o', '--output', type=str, default='dump', help='Output directory to use.')
 parser.add_argument('-i', '--input', type=str, default='data/ads_clean.csv', help='Path to the input dataset.')
-parser.add_argument('-cv', type=bool, default=False, help='Pass if hyperparameters should be tuned via cross validation')
+parser.add_argument('-cv', type=int, default=-1, help='Pass if hyperparameters should be tuned via cross validation')
 args = parser.parse_args()
 trees = args.trees
 dump_dir = args.output
@@ -36,12 +36,14 @@ x_tr, x_te, y_tr, y_te = split_data(x, train_pct)
 class_weights = {0: 1, 1: 1000}
 parameters = tuned_parameters = [{'n_estimators': [10, 100, 1000], 'max_features': ["auto", "sqrt", "log2", None]}]
 
-if args.cv:
-    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=5, scoring='f1', n_jobs=-1)
+if args.cv > 0:
+    print('Cross-validating parameters')
+    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring='f1', n_jobs=-1, verbose=1)
     clf.fit(x_tr, y_tr)
     print(f"Best estimator: {clf.best_estimator_}, params: {clf.best_params_}, score: {clf.best_score_}")
     y_pred = clf.predict(x_te)
 else:
+    print('Running random forest')
     rf = RandomForestClassifier(n_estimators=trees, n_jobs=-1, verbose=1, class_weight=class_weights)
     rf.fit(x_tr, y_tr)
     y_pred = rf.predict(x_te)
@@ -65,7 +67,7 @@ else:
 if not isdir(join(dump_dir, 'rf')):
     mkdir(join(dump_dir, 'rf'))
 
-if args.cv:
+if args.cv > 0:
     dump(clf.best_estimator_, join(dump_dir, 'rf', id))
 else:
     dump(rf, join(dump_dir, 'rf', id))
