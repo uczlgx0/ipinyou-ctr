@@ -41,7 +41,7 @@ if args.cv > 0:
     kappa_scorer = make_scorer(cohen_kappa_score)
     clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring=kappa_scorer, n_jobs=-1, verbose=1)
     clf.fit(x_tr, y_tr)
-    print(f"Best estimator: {clf.best_estimator_}, params: {clf.best_params_}, score: {clf.best_score_}")
+    print('Best estimator', clf.best_estimator_, 'params', clf.best_params_, 'score', clf.best_score_)
     y_pred = clf.predict(x_te)
     rf = clf.best_estimator_
 else:
