@@ -53,7 +53,7 @@ else:
 recall = recall_score(y_te, y_pred)
 precision = precision_score(y_te, y_pred)
 kappa = cohen_kappa_score(y_te, y_pred)
-print(f'Kappa: {kappa}')
+print('Kappa', kappa)
 print(classification_report(y_te, y_pred))
 
 id = str(int(time()))
