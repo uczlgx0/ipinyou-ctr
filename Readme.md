@@ -12,9 +12,12 @@ classifications, we use the following variables:
 | --- | --- |
 | click | boolean |
 | imp | boolean |
-| Browser | string |
-| AdExchange | int |
+| Browser | categorical |
+| AdExchange | categorical |
 | AdvertiserID | int |
+| Adslotvisibility | categorical |
+| Adslotformat | categorical |
+| Payingprice | int |
 | Adslotwidth | int |
 | Adslotheight | int |
 | interest_* | boolean |
@@ -30,7 +33,7 @@ directly dependent upon `imp` (ie, `click` cannot be true if `imp` is false). Th
 In our dataset, `Browser` indicates the [user agent][2] of the user targeted by the bid. We use the Python package
 [ua-parser][3] to translate the user agent into a factor variable which will indicate the browser family of the user
 (ie, `Mozilla Firefox`, `Chrome`, `Safari`, ...). `AdvertiserID` contains the unique identification number for each
-advertiser. To reduce our memory overhead, we will use only bids where `AdvertiserID == 2259` (a milk provider).
+advertiser. To reduce our memory overhead, we will use only bids where `AdvertiserID == 2821` (footware seller).
 
 The actual user-identifiable variables are the `interest_*`-variables. They indicate whether the user has shown a
 specific interest into a tag used by iPinYou. For example, if the user is known to be interested in education-related
@@ -40,10 +43,27 @@ material, `interest_education == True`. The same holds true for the `Inmarket_*`
 Notice that there are additional variables in the dataset, which we chose to ignore (at least for the initial analysis).
 Some of them are completely irrelevant to the `click` prediction, such as the domain name of the ad. Others could be
 interesting for the `click` prediction and may be used in future predictions. Examples include the ad format or the
-region of the user. We decided against using ad format variables like `Adviewability` because they contain too many
+region of the user. We decided against using ad format variables like `Adslotvisibility` because they contain too many
 missing values. Other variables are discouraged by the distributor of the dataset, because they are not consistent.
 This holds true for the `conv` variable, which indicates whether a user actually converted to a customer after clicking
 on an ad.
+
+The following table lists the discarded variables:
+
+| Name | Type | Reason |
+| Index | int | Obvious |
+| BidID | int | Identifier useless for classification (changes for every observation) |
+| Time_Bid | int | Bids were conducted one one afternoon - results wouldn't generalize |
+| UserID | int | See `BidID` |
+| IP | string | Useless on its own, ISP data has no connection to ads, location data can be extracted, but is already present in `Region` |
+| Domain | string | Variable is hashed, referral page of ad probably doesn't exist anymore and has only post-click effects |
+| URL | string | See `Domain` |
+| AdslotID | int | See `BidID` |
+| Adslotfloorprice | int | Information is already contained in `Payingprice` |
+| CreativeID | int | Variable is hashed and very specific to the ad |
+| Biddingprice | int | Merged into `Payingprice` |
+| conv | int | Variable affects only post-click period and is discouraged by provider due to the non-standard conversion definitions of advertisers |
+
 
 Classification
 ---

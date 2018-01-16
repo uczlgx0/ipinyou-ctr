@@ -9,7 +9,7 @@ from os.path import isdir, isfile, join
 from pandas import read_csv
 from csv import writer
 from os import mkdir
-from util import split_data
+from util import split_data, dump_rf
 
 rf_models_path = 'rf_models.csv'
 train_pct = 0.8
@@ -56,19 +56,4 @@ kappa = cohen_kappa_score(y_te, y_pred)
 print('Kappa', kappa)
 print(classification_report(y_te, y_pred))
 
-id = str(int(time()))
-if isfile(rf_models_path):
-    with open(rf_models_path, 'a') as file:
-        models_writer = writer(file)
-        models_writer.writerow([id, kappa, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
-else:
-    with open(rf_models_path, 'w') as file:
-        models_writer = writer(file)
-        models_writer.writerow(
-            ['id', 'kappa', 'recall', 'precision', 'n_estimators', 'class_weight_0', 'class_weight_1'])
-        models_writer.writerow([id, kappa, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
-
-if not isdir(join(dump_dir, 'rf')):
-    mkdir(join(dump_dir, 'rf'))
-
-dump(rf, join(dump_dir, 'rf', id))
+dump_rf(rf, dump_dir, rf_models_path, kappa, precision, recall)
