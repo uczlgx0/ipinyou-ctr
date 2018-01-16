@@ -2,7 +2,7 @@
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals.joblib import dump
-from sklearn.metrics import classification_report, f1_score, recall_score, precision_score
+from sklearn.metrics import classification_report, cohen_kappa_score, recall_score, precision_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from time import time
 from os.path import isdir, isfile, join
@@ -38,10 +38,12 @@ parameters = tuned_parameters = [{'n_estimators': [10, 100, 1000], 'max_features
 
 if args.cv > 0:
     print('Cross-validating parameters')
-    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring='f1', n_jobs=-1, verbose=1)
+    kappa_scorer = make_scorer(cohen_kappa_score)
+    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring=kappa_scorer, n_jobs=-1, verbose=1)
     clf.fit(x_tr, y_tr)
     print(f"Best estimator: {clf.best_estimator_}, params: {clf.best_params_}, score: {clf.best_score_}")
     y_pred = clf.predict(x_te)
+    rf = clf.best_estimator_
 else:
     print('Running random forest')
     rf = RandomForestClassifier(n_estimators=trees, n_jobs=-1, verbose=1, class_weight=class_weights)
@@ -50,24 +52,23 @@ else:
 
 recall = recall_score(y_te, y_pred)
 precision = precision_score(y_te, y_pred)
+kappa = cohen_kappa_score(y_te, y_pred)
+print(f'Kappa: {kappa}')
 print(classification_report(y_te, y_pred))
 
 id = str(int(time()))
 if isfile(rf_models_path):
     with open(rf_models_path, 'a') as file:
         models_writer = writer(file)
-        models_writer.writerow([id, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
+        models_writer.writerow([id, kappa, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
 else:
     with open(rf_models_path, 'w') as file:
         models_writer = writer(file)
         models_writer.writerow(
-            ['id', 'recall', 'precision', 'n_estimators', 'class_weight_0', 'class_weight_1'])
-        models_writer.writerow([id, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
+            ['id', 'kappa', 'recall', 'precision', 'n_estimators', 'class_weight_0', 'class_weight_1'])
+        models_writer.writerow([id, kappa, recall, precision, rf.n_estimators, rf.class_weight[0], rf.class_weight[1]])
 
 if not isdir(join(dump_dir, 'rf')):
     mkdir(join(dump_dir, 'rf'))
 
-if args.cv > 0:
-    dump(clf.best_estimator_, join(dump_dir, 'rf', id))
-else:
-    dump(rf, join(dump_dir, 'rf', id))
+dump(rf, join(dump_dir, 'rf', id))
