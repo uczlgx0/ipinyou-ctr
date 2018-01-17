@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pandas as pd
-from ua_parser.user_agent_parser import ParseUserAgent
+from httpagentparser.httpagentparser import simple_detect
 
 use_browser = False
 ads = pd.read_csv('data/ads.csv', low_memory=False, usecols=['click', 'AdvertiserID', 'AdExchange', 'Adslotwidth',
