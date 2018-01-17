@@ -2,4 +2,3 @@ pandas
 numpy
 scikit-learn
 matplotlib
-ua-parser

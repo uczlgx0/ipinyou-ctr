@@ -3,3 +3,5 @@ __*
 data/*
 dump/*
 !.gitignore
+!/data/dummy.txt
+
