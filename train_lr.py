@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pandas import get_dummies, read_pickle
 import statsmodels.api as sm
+from time import time
 
 ads = read_pickle('data/ads_clean.p')
 browser_dummies = get_dummies(ads['Browser'], prefix='Browser')
@@ -19,5 +20,6 @@ ads['intercept'] = 1.0
 
 ads = ads.astype(int)
 logit = sm.Logit(ads['click'], ads.drop(['click'], axis=1))
-result = logit.fit(maxiter=100)
+result = logit.fit(maxiter=200)
+result.save('lr_' + str(time()) + '.p')
 print(result.summary())
