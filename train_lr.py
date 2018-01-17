@@ -20,6 +20,6 @@ ads['intercept'] = 1.0
 
 ads = ads.astype(int)
 logit = sm.Logit(ads['click'], ads.drop(['click'], axis=1))
-result = logit.fit(maxiter=200)
+result = logit.fit(maxiter=500)
 result.save('lr_' + str(time()) + '.p')
 print(result.summary())
