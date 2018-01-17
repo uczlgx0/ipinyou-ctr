@@ -33,20 +33,19 @@ x = x.astype(int)
 
 x_tr, x_te, y_tr, y_te = split_data(x, train_pct)
 
-class_weights = {0: 1, 1: 1000}
-parameters = tuned_parameters = [{'n_estimators': [10, 100, 1000], 'max_features': ["auto", "sqrt", "log2", None]}]
+parameters = tuned_parameters = [{'n_estimators': [10, 100, 1000], 'max_features': ["auto", "sqrt", "log2", None], 'class_weight': ['balanced', None]}]
 
 if args.cv > 0:
     print('Cross-validating parameters')
     kappa_scorer = make_scorer(cohen_kappa_score)
-    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring=kappa_scorer, n_jobs=-1, verbose=1)
+    clf = GridSearchCV(RandomForestClassifier(), tuned_parameters, cv=args.cv, scoring='neg_log_loss', n_jobs=-1, verbose=1)
     clf.fit(x_tr, y_tr)
+    rf = clf.best_estimator_
     print('Best estimator', clf.best_estimator_, 'params', clf.best_params_, 'score', clf.best_score_)
     y_pred = clf.predict(x_te)
-    rf = clf.best_estimator_
 else:
     print('Running random forest')
-    rf = RandomForestClassifier(n_estimators=trees, n_jobs=-1, verbose=1, class_weight=class_weights)
+    rf = RandomForestClassifier(n_estimators=trees, n_jobs=-1, verbose=1, class_weight='balanced')
     rf.fit(x_tr, y_tr)
     y_pred = rf.predict(x_te)
 

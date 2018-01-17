@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pandas import get_dummies, read_pickle
 import statsmodels.api as sm
 
@@ -19,3 +20,4 @@ ads['intercept'] = 1.0
 ads = ads.astype(int)
 logit = sm.Logit(ads['click'], ads.drop(['click'], axis=1))
 result = logit.fit(maxiter=100)
+print(result.summary())
