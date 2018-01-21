@@ -29,10 +29,10 @@ directly dependent upon `imp` (ie, `click` cannot be true if `imp` is false). Th
 `imp == True` as training and test data.
 
 In our dataset, `Browser` indicates the [user agent][2] of the user targeted by the bid. We implement a simple parser to
-map `Browser` to two variables: `OS` indicates the operating system (`Windows`, `Mac OS X`, `Linux`, `other`) and `Browser`
-indicates the browser family of the user (`Firefox`, `Chrome`, `Safari`, `Opera` and `Internet Explorer`). `AdvertiserID`
-contains the unique identification number for each advertiser. To reduce our memory overhead, we will use only bids where
-`AdvertiserID == 2821` (footware seller).
+map `Browser` to two variables: `OS` indicates the operating system (`Windows`, `Mac OS X`, `Linux` and `other`) and `Browser`
+indicates the browser family of the user (`Firefox`, `Chrome`, `Safari`, `Opera`, `Internet Explorer` and `other`).
+`AdvertiserID` contains the unique identification number for each advertiser. To reduce our memory overhead, we will use
+only bids where `AdvertiserID == 2821` (footware seller).
 
 The actual user-identifiable variables are the `interest_*`-variables. They indicate whether the user has shown a
 specific interest into a tag used by iPinYou. For example, if the user is known to be interested in education-related
@@ -47,6 +47,7 @@ which indicates whether a user actually converted to a customer after clicking o
 The following table lists the discarded variables:
 
 | Name | Type | Reason |
+| --- | --- | --- |
 | Index | int | Obvious |
 | BidID | int | Identifier useless for classification (different for every observation) |
 | Time_Bid | int | Bids were conducted only on one afternoon - results wouldn't generalize |
