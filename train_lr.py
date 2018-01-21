@@ -4,6 +4,7 @@ from os import makedirs
 from os.path import join, isdir
 from pickle import dump
 from time import time
+import pandas_ml as pdml
 
 
 from pandas import get_dummies, read_pickle
@@ -32,6 +33,9 @@ os_dummies.drop(['OS_other'], axis=1, inplace=True)
 ads = ads.join([browser_dummies, adex_dummies, advi_dummies, adfo_dummies, os_dummies])
 ads.drop(['Browser', 'AdExchange', 'Adslotvisibility', 'Adslotformat', 'OS'], axis=1, inplace=True)
 
+ads_ml = pdml.ModelFrame(ads, target='click')
+sampler = ads_ml.imbalance.over_sampling.RandomOverSampler()
+ads = ads_ml.fit_sample(sampler)
 
 if mode == 'rfe':
     from sklearn.feature_selection import RFECV

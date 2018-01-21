@@ -79,8 +79,7 @@ def map_os(agent):
 ads['OS'] = ads['Browser'].map(lambda x: map_os(x), na_action=None)
 ads['Browser'] = ads['Browser'].map(lambda x: map_browser(x), na_action=None)
 ads.drop(['Demographic_gender_male'], axis=1, inplace=True)
-# ToDo: Make dummy variables for categoricals
-ads.dropna(inplace=True)  # ToDo: Decrease strictness to preserve more positive classes
+ads.dropna(inplace=True)
 int_cols = ['AdvertiserID', 'Adslotwidth', 'Adslotheight']
 ads[int_cols] = ads[int_cols].astype(int)
 ads.to_csv('data/ads_clean.csv', index=False)
