@@ -62,6 +62,7 @@ The following table lists the discarded variables:
 | conv | int | Variable affects only post-click period and is discouraged by provider due to the non-standard conversion definitions of advertisers |
 | Region | int | Doesn't generalize beyond Chinese market |
 | City | int | See `Region` |
+| Demographic_gender_male | bool | Negative `Demographic_gender_female` |
 
 Classification
 ---
