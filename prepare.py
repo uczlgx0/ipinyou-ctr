@@ -52,8 +52,6 @@ ads = ads[ads['imp']]
 ads.drop(['imp'], axis=1, inplace=True)
 ads.loc[ads['Payingprice'].isnull(), 'Payingprice'] = ads.loc[ads['Payingprice'].isnull(), 'Biddingprice']
 ads.drop('Biddingprice', axis=1, inplace=True)
-# ToDo: Use only AdvertiserID == 2821
-ads.drop(['AdvertiserID'], axis=1, inplace=True)
 ads['AdExchange'] = ads['AdExchange'].astype('int').astype('category')
 ads['Adslotvisibility'] = ads['Adslotvisibility'].astype('category')
 ads['Adslotformat'] = ads['Adslotformat'].astype('category')

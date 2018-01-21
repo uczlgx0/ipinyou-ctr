@@ -19,6 +19,7 @@ dump_dir = args.output
 mode = args.mode
 
 ads = read_pickle('data/ads_clean.p')
+ads = ads[(ads.click == True) | ((ads.click == False) & (ads.AdvertiserID == 2821))]
 ads.drop(['AdvertiserID'], axis=1, inplace=True)
 browser_dummies = get_dummies(ads['Browser'], prefix='Browser')
 browser_dummies.drop(['Browser_other'], axis=1, inplace=True)
