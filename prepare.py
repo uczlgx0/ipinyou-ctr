@@ -2,8 +2,8 @@
 import pandas as pd
 
 use_browser = False
-ads = pd.read_csv('data/ads.csv', low_memory=False, usecols=['click', 'Browser' 'AdvertiserID', 'AdExchange', 'Adslotwidth',
-                                           'Adslotheight', 'Adslotvisibility', 'Adslotformat', 'Biddingprice' 'imp', 'interest_news',
+ads = pd.read_csv('data/ads.csv', usecols=['click', 'AdvertiserID', 'AdExchange', 'Adslotwidth',
+                                           'Adslotheight', 'Adslotvisibility', 'Adslotformat', 'Biddingprice', 'Browser', 'imp', 'interest_news',
                                            'interest_eduation', 'interest_automobile', 'interest_realestate',
                                            'interest_IT', 'interest_electronicgame', 'interest_fashion',
                                            'interest_entertainment', 'interest_luxury', 'interest_homeandlifestyle',
